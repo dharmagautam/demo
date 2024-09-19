@@ -4,6 +4,7 @@ import com.example.demo.model.Players;
 import com.example.demo.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/players")
+@CrossOrigin(origins  = "*")
 public class MyController {
     private PlayerService playerService;
     @Autowired
@@ -20,6 +22,7 @@ public class MyController {
         this.playerService = playerService;
     }
 
+    
     @GetMapping
     public List<Players> getAllPlayers() {
         return playerService.getAllPlayers();
@@ -30,13 +33,13 @@ public class MyController {
         return playerService.getAllPlayersBlocking();
     }
 
-    @GetMapping("/stream")
+    @GetMapping(value = "/stream")
     public Flux<Players> getAllPlayersFlux() {
         return playerService.getAllPlayersFlux();
     }
 
     // back pressure enabled
-    @GetMapping(value = "/reactive",produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/reactive", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Players> getAllPlayersFluxReactive() {
         return playerService.getAllPlayersFlux();
     }
